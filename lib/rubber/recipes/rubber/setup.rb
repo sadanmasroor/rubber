@@ -35,10 +35,13 @@ namespace :rubber do
         public_key = File.read(public_key_filename).chomp
 
         rubber.sudo_script 'ensure_key_file_present', <<-ENDSCRIPT
+          logger.info "making dir"
           mkdir -p ~/.ssh
+          logger.info "touching authorized keys"
           touch ~/.ssh/authorized_keys
+          logger.info "assinging permission on authorized keys"
           chmod 600 ~/.ssh/authorized_keys
-
+          logger.info "all done now echoing... "
           if ! grep -q '#{public_key}' .ssh/authorized_keys; then
             echo '#{public_key}' >> .ssh/authorized_keys
           fi
